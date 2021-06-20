@@ -22,13 +22,11 @@ namespace Zombie_Shooter
         int ammoCount = 10;
         int score;
         int zombieSpeed = 3;
-        Random randNum = new Random();
         Image ammo = new Image();
+        Image zombie;
+        Random randNum = new Random();
         Uri resourceUri;
 
-        Rect playerHitBox;
-
-        //List<Image> zombiesList = new List<Image>();
         List<Image> zombiesList = new List<Image>();
 
         DispatcherTimer gameTimer = new DispatcherTimer();
@@ -43,6 +41,7 @@ namespace Zombie_Shooter
             gameTimer.Start();
 
             Stage.Focus();
+            RestartGame();
         }
 
         private void GameLoop(object sender, EventArgs e)
@@ -52,8 +51,6 @@ namespace Zombie_Shooter
 
         void GameTimerEvent(object sender, EventArgs e)
         {
-            //timer.Content = DateTime.Now.ToLongTimeString();
-
             if (playerHealth > 1)
                 healthBar.Value = playerHealth;
             else
@@ -83,6 +80,7 @@ namespace Zombie_Shooter
                 Canvas.SetTop(player, Canvas.GetTop(player) + speed);
             }
 
+            // Check collision between player and ammo objects - IntersectsWith
             if (Canvas.GetLeft(player) + (player.Width) > Canvas.GetLeft(ammo) + (ammo.Width) &&
                         Canvas.GetLeft(player) + (player.Width) < Canvas.GetLeft(ammo) + (ammo.Width * 2) &&
                         Canvas.GetTop(player) + (player.Height) > Canvas.GetTop(ammo) + (ammo.Height) &&
@@ -92,7 +90,54 @@ namespace Zombie_Shooter
 
                 if (ammoCount == 0)
                     ammoCount += 5;
-            }         
+            }
+
+            foreach (UIElement item in Stage.Children)
+            {
+                if (item is Image && ((Image)item).Tag == "zombie")
+                {
+                    if (Canvas.GetLeft(item) > Canvas.GetLeft(player))
+                    {
+                        Canvas.SetLeft(item, Canvas.GetLeft(item) - zombieSpeed);
+                        ((Image)item).Source = new BitmapImage(resourceUri = new Uri("/images/zleft.png", UriKind.Relative));
+                    }
+                    if (Canvas.GetLeft(item) < Canvas.GetLeft(player))
+                    {
+                        Canvas.SetLeft(item, Canvas.GetLeft(item) + zombieSpeed);
+                        ((Image)item).Source = new BitmapImage(resourceUri = new Uri("/images/zright.png", UriKind.Relative));
+                    }
+                    if (Canvas.GetTop(item) > Canvas.GetTop(player))
+                    {
+                        Canvas.SetTop(item, Canvas.GetTop(item) - zombieSpeed);
+                        ((Image)item).Source = new BitmapImage(resourceUri = new Uri("/images/zup.png", UriKind.Relative));
+                    }
+                    if (Canvas.GetTop(item) < Canvas.GetTop(player))
+                    {
+                        Canvas.SetTop(item, Canvas.GetTop(item) + zombieSpeed);
+                        ((Image)item).Source = new BitmapImage(resourceUri = new Uri("/images/zdown.png", UriKind.Relative));
+                    }
+                }
+
+                foreach (UIElement shoot in Stage.Children)
+                {
+                    if (shoot is Ellipse && ((Ellipse)shoot).Tag == "bullet" && item is Image && ((Image)item).Tag == "zombie")
+                    {
+                        // Check collision between bullet (shoot) and zombie objects - IntersectsWith
+                        if (Canvas.GetLeft(shoot) + (((Ellipse)shoot).Width) > Canvas.GetLeft(item) + (((Image)item).Width) &&
+                        //Canvas.GetLeft(shoot) + (((Ellipse)shoot).Width) < Canvas.GetLeft(item) + (((Image)item).Width / 2) &&
+                        //Canvas.GetTop(shoot) + (((Ellipse)shoot).Height) > Canvas.GetTop(item) + (((Image)item).Height) &&
+                        Canvas.GetTop(shoot) + (((Ellipse)shoot).Height) < Canvas.GetTop(item) + (((Image)item).Height / 2))
+                        {
+                            score++;
+
+                            //Stage.Children.Remove(shoot);
+                            //Stage.Children.Remove(item);
+                            //zombiesList.Remove(((Image)item));
+                            //MakeZombies();
+                        }
+                    }
+                }
+            }
         }
 
         private void KeyIsDown(object sender, KeyEventArgs e)
@@ -166,9 +211,9 @@ namespace Zombie_Shooter
 
         private void MakeZombies()
         {
-            Image zombie = new Image();
+            zombie = new Image();
 
-            zombie.Name = "zombie";
+            zombie.Tag = "zombie";
             zombie.Source = new BitmapImage(resourceUri = new Uri("/images/zdown.png", UriKind.Relative));
             zombie.Width = 71;
             zombie.Height = 71;
@@ -176,12 +221,11 @@ namespace Zombie_Shooter
             Canvas.SetTop(zombie, randNum.Next(0, 700));
             zombiesList.Add(zombie);
             Stage.Children.Add(zombie);
-            player.BringIntoView();
         }
 
         private void DropAmmo()
         {
-            ammo.Name = "ammo";
+            ammo.Tag = "ammo";
             ammo.Source = new BitmapImage(resourceUri = new Uri("/images/ammo-Image.png", UriKind.Relative));
             ammo.Width = 50;
             ammo.Height = 50;
@@ -194,7 +238,30 @@ namespace Zombie_Shooter
 
         private void RestartGame()
         {
+            player.Source = new BitmapImage(resourceUri = new Uri("/images/up.png", UriKind.Relative));
 
+            foreach (Image zombie in zombiesList)
+            {
+                Stage.Children.Remove(zombie);
+            }
+
+            zombiesList.Clear();
+
+            for (int i = 0; i < 3; i++)
+            {
+                MakeZombies();
+            }
+
+            goUp = false;
+            goDown = false;
+            goLeft = false;
+            goRight = false;
+
+            playerHealth = 100;
+            score = 0;
+            ammoCount = 10;
+
+            gameTimer.Start();
         }
     }
 }

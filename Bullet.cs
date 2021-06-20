@@ -27,7 +27,7 @@ namespace Zombie_Shooter
             // Each value has a range of 0-255.
             mySolidColorBrush.Color = Color.FromArgb(255, 255, 255, 255);
             
-            bullet.Name = "bullet";
+            bullet.Tag = "bullet";
             bullet.Width = 2;
             bullet.Height = 2;
             bullet.Fill = mySolidColorBrush;
