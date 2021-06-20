@@ -65,6 +65,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Bullet.cs" />
+    <Compile Include="Image.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -96,7 +97,9 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="up.png" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="images\ammo-Image.png" />
     <Resource Include="images\dead.png" />
