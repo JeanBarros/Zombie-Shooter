@@ -9,10 +9,10 @@
     <Canvas x:Name="Stage" Focusable="True" Background="#FF130505" KeyDown="KeyIsDown" KeyUp="KeyIsUp">
         <Label x:Name="txtAmmo" Foreground="#FFA2FF00" FontSize="14" Canvas.Top="14" Canvas.Left="10"/>
         <Label x:Name="txtScore" Foreground="#FFA2FF00" FontSize="14" Canvas.Left="381" Canvas.Top="14"/>
-        <Label x:Name="txtHealth" Content="Health:" Foreground="#FFA2FF00" FontSize="14" Canvas.Left="676" Canvas.Top="14"/>
+        <Label x:Name="txtHealth" Content="Health:" Foreground="#FFA2FF00" FontSize="14" Canvas.Left="663" Canvas.Top="14"/>
         <Label Name="timer" Foreground="#ffffff" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center" Canvas.Left="432" Canvas.Top="549" />
-        <ProgressBar x:Name="healthBar" Width="188" Height="20" Canvas.Right="10" Canvas.Top="20" Value="100" Canvas.Left="734"/>
-        
-        <Image x:Name="player" Source="images/up.png" Canvas.Left="381" Canvas.Top="559" Width="100" Height="100" Stretch="None" Panel.ZIndex="1" />
+        <ProgressBar x:Name="healthBar" Width="188" Height="20" Canvas.Right="10" Canvas.Top="20" Value="100" Canvas.Left="720"/>
+        <Rectangle Name="player" Width="71" Height="100" Fill="Yellow" Canvas.Left="381" Canvas.Top="559"  />
+        <!--<Image x:Name="player" Source="images/up.png" Canvas.Left="381" Canvas.Top="559" Width="100" Height="100" Stretch="None" Panel.ZIndex="1" />-->
     </Canvas>
 </Window>

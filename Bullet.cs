@@ -14,8 +14,8 @@ namespace Zombie_Shooter
         public double bulletTop;
 
         private double speed = 25;
-        // Create a Ellipse.
-        private Ellipse bullet = new Ellipse();
+
+        private Rectangle bullet = new Rectangle();
         private DispatcherTimer bulletTimer = new DispatcherTimer();
 
         public void MakeBullet(Canvas stage)
@@ -31,12 +31,11 @@ namespace Zombie_Shooter
             bullet.Width = 2;
             bullet.Height = 2;
             bullet.Fill = mySolidColorBrush;
+            bullet.Stroke = Brushes.Orange;
+            //bullet.StrokeThickness = 2;
             Canvas.SetLeft(bullet, bulletLeft);
             Canvas.SetTop(bullet, bulletTop);
-
-            // Add the Ellipse to the canvas.
             stage.Children.Add(bullet);
-            //bullet.Visibility = Visibility.Hidden;
 
             bulletTimer.Interval = TimeSpan.FromMilliseconds(speed);
             bulletTimer.Tick += new EventHandler(BulletTimerEvent);
@@ -59,17 +58,13 @@ namespace Zombie_Shooter
                 case "down":
                     Canvas.SetTop(bullet, Canvas.GetTop(bullet) + speed);
                     break;
-                default:
-                    //bullet.Visibility = Visibility.Visible;
-                    break;
             }
 
             if (Canvas.GetLeft(bullet) < 0 || Canvas.GetLeft(bullet) > 940 || Canvas.GetTop(bullet) < 0 || Canvas.GetTop(bullet) > 700)
             {
                 bulletTimer.Stop();
                 bulletTimer = null;                
-                bullet = null;
-                
+                bullet = null;                
             }
         }
     }
